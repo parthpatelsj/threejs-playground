@@ -1,15 +1,4 @@
-<!--
-Copyright 2016 Google Inc. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+
 <!doctype html>
 <head>
   <meta charset="utf-8">
@@ -28,95 +17,53 @@ limitations under the License.
   <script src="third_party/three.min.js"></script>
   <script>
     // Set the scene size.
-    const WIDTH = window.innerWidth;
-    const HEIGHT = window.innerHeight;
+    // ------------------------------------------------
+// BASIC SETUP
+// ------------------------------------------------
 
-    // Set some camera attributes.
-    const VIEW_ANGLE = 45;
-    const ASPECT = WIDTH / HEIGHT;
-    const NEAR = 0.1;
-    const FAR = 10000;
+// Create an empty scene
+var scene = new THREE.Scene();
 
-    // Get the DOM element to attach to
-    const container =
-        document.querySelector('#container');
+// Create a basic perspective camera
+var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+camera.position.z = 4;
 
-    // Create a WebGL renderer, camera
-    // and a scene
-    const renderer = new THREE.WebGLRenderer();
-    const camera =
-        new THREE.PerspectiveCamera(
-            VIEW_ANGLE,
-            ASPECT,
-            NEAR,
-            FAR
-        );
+// Create a renderer with Antialiasing
+var renderer = new THREE.WebGLRenderer({antialias:true});
 
-    const scene = new THREE.Scene();
+// Configure renderer clear color
+renderer.setClearColor("#000000");
 
-    // Add the camera to the scene.
-    scene.add(camera);
+// Configure renderer size
+renderer.setSize( window.innerWidth, window.innerHeight );
 
-    // Start the renderer.
-    renderer.setSize(WIDTH, HEIGHT);
+// Append Renderer to DOM
+document.body.appendChild( renderer.domElement );
 
-    // Attach the renderer-supplied
-    // DOM element.
-    container.appendChild(renderer.domElement);
+// ------------------------------------------------
+// FUN STARTS HERE
+// ------------------------------------------------
 
-    // create a point light
-    const pointLight =
-      new THREE.PointLight(0xFFFFFF);
+// Create a Cube Mesh with basic material
+var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+var material = new THREE.MeshBasicMaterial( { color: "#433F81" } );
+var cube = new THREE.Mesh( geometry, material );
 
-    // set its position
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
+// Add cube to Scene
+scene.add( cube );
 
-    // add to the scene
-    scene.add(pointLight);
+// Render Loop
+var render = function () {
+  requestAnimationFrame( render );
 
-    // create the sphere's material
-    const sphereMaterial =
-      new THREE.MeshLambertMaterial(
-        {
-          color: 0xCC0000
-        });
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
-    // Set up the sphere vars
-    const RADIUS = 50;
-    const SEGMENTS = 16;
-    const RINGS = 16;
+  // Render the scene
+  renderer.render(scene, camera);
+};
 
-    // Create a new mesh with
-    // sphere geometry - we will cover
-    // the sphereMaterial next!
-    const sphere = new THREE.Mesh(
-
-      new THREE.SphereGeometry(
-        RADIUS,
-        SEGMENTS,
-        RINGS),
-
-      sphereMaterial);
-
-    // Move the Sphere back in Z so we
-    // can see it.
-    sphere.position.z = -300;
-
-    // Finally, add the sphere to the scene.
-    scene.add(sphere);
-
-    function update () {
-      // Draw!
-      renderer.render(scene, camera);
-
-      // Schedule the next frame.
-      requestAnimationFrame(update);
-    }
-
-    // Schedule the first frame.
-    requestAnimationFrame(update);
+render();
   </script>
 </body>
 </html>
