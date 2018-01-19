@@ -18,52 +18,84 @@
   <script>
     // Set the scene size.
     // ------------------------------------------------
-// BASIC SETUP
-// ------------------------------------------------
+      // BASIC SETUP
+      // ------------------------------------------------
 
-// Create an empty scene
-var scene = new THREE.Scene();
+      // Create an empty scene
+      var scene = new THREE.Scene();
 
-// Create a basic perspective camera
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-camera.position.z = 4;
+      // Create a basic perspective camera
+      var camera = new THREE.PerspectiveCamera( 50, window.innerWidth/window.innerHeight, 1, 1000 );
+      camera.position.z = 100;
 
-// Create a renderer with Antialiasing
-var renderer = new THREE.WebGLRenderer({antialias:true});
+      // Create a renderer with Antialiasing
+      var renderer = new THREE.WebGLRenderer({antialias:true});
 
-// Configure renderer clear color
-renderer.setClearColor("#000000");
+      // Configure renderer clear color
+      renderer.setClearColor("#000000");
 
-// Configure renderer size
-renderer.setSize( window.innerWidth, window.innerHeight );
+      // Configure renderer size
+      renderer.setSize( window.innerWidth, window.innerHeight );
 
-// Append Renderer to DOM
-document.body.appendChild( renderer.domElement );
+      // Append Renderer to DOM
+      document.body.appendChild( renderer.domElement );
 
-// ------------------------------------------------
-// FUN STARTS HERE
-// ------------------------------------------------
+      // ------------------------------------------------
+      // FUN STARTS HERE
+      // ------------------------------------------------
 
-// Create a Cube Mesh with basic material
-var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-var material = new THREE.MeshBasicMaterial( { color: "#433F81" } );
-var cube = new THREE.Mesh( geometry, material );
+      // Create a Cube Mesh with basic material
+      var geometry = new THREE.BoxGeometry( 30, 30, 30 );
+      var material = new THREE.MeshPhongMaterial({color: 0x7777ff});
+      var cube = new THREE.Mesh( geometry, material );
 
-// Add cube to Scene
-scene.add( cube );
+      // Add cube to Scene
+      scene.add( cube );
 
-// Render Loop
-var render = function () {
-  requestAnimationFrame( render );
+      var clock = new THREE.Clock();
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
 
-  // Render the scene
-  renderer.render(scene, camera);
-};
+      var sphere = new THREE.SphereGeometry( 0.5, 16, 8 );
+        light1 = new THREE.PointLight( 0xff0040, 2, 50 );
+        light1.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xff0040 } ) ) );
+        scene.add( light1 );
+        light2 = new THREE.PointLight( 0x0040ff, 2, 50 );
+        light2.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x0040ff } ) ) );
+        scene.add( light2 );
+        light3 = new THREE.PointLight( 0x80ff80, 2, 50 );
+        light3.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0x80ff80 } ) ) );
+        scene.add( light3 );
+        light4 = new THREE.PointLight( 0xffaa00, 2, 50 );
+        light4.add( new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( { color: 0xffaa00 } ) ) );
+        scene.add( light4 );
 
-render();
+      // Render Loop
+      var render = function () {
+        requestAnimationFrame( render );
+
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+
+        var time = Date.now() * 0.0005;
+        var delta = clock.getDelta();
+        light1.position.x = Math.sin( time * 0.7 ) * 30;
+        light1.position.y = Math.cos( time * 0.5 ) * 40;
+        light1.position.z = Math.cos( time * 0.3 ) * 30;
+        light2.position.x = Math.cos( time * 0.3 ) * 30;
+        light2.position.y = Math.sin( time * 0.5 ) * 40;
+        light2.position.z = Math.sin( time * 0.7 ) * 30;
+        light3.position.x = Math.sin( time * 0.7 ) * 30;
+        light3.position.y = Math.cos( time * 0.3 ) * 40;
+        light3.position.z = Math.sin( time * 0.5 ) * 30;
+        light4.position.x = Math.sin( time * 0.3 ) * 30;
+        light4.position.y = Math.cos( time * 0.7 ) * 40;
+        light4.position.z = Math.sin( time * 0.5 ) * 30;
+
+        // Render the scene
+        renderer.render(scene, camera);
+      };
+
+      render();
   </script>
 </body>
 </html>
